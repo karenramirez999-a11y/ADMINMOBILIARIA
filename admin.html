@@ -295,18 +295,80 @@ select.fi option{background:#FFF;color:var(--tx)}
 .tl-title{font-size:.82rem;font-weight:500;color:var(--tx)}
 .tl-desc{font-size:.76rem;color:var(--t2);margin-top:.1rem;line-height:1.5}
 .tl-time{font-size:.66rem;color:var(--t3);margin-top:.15rem}
+.dash-grid-top {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.dash-grid-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+.agenda-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 1.2rem;
+}
 
 /* RESPONSIVE */
-@media(max-width:1100px){.sg{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:900px){.setgrid{grid-template-columns:1fr}.fgrid3{grid-template-columns:1fr 1fr}}
+@media(max-width:1100px){
+  .sg{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .setgrid{grid-template-columns:1fr}
+  .fgrid3{grid-template-columns:1fr 1fr}
+  .dash-grid-top, .dash-grid-bottom, .agenda-grid {
+    grid-template-columns: 1fr;
+  }
+}
 @media(max-width:768px){
   .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}
   .main{margin-left:0}.ham{display:flex}
-  .sg{grid-template-columns:1fr 1fr}.pb{padding:1.1rem}
+  .sg{grid-template-columns:1fr}.pb{padding:1.1rem}
   .fgrid2,.fgrid3{grid-template-columns:1fr}.fspan2{grid-column:span 1}
-  .tbl thead th:nth-child(n+4),.tbl tbody td:nth-child(n+4){display:none}
+  
+  /* Kanban stacks vertically on mobile to avoid horizontal scrolling */
+  .kanban {
+    flex-direction: column !important;
+    overflow-x: visible !important;
+  }
+  .kcol {
+    width: 100% !important;
+    margin-bottom: 1rem;
+  }
+  
+  /* Allow internal table scrolling without breaking the layout width */
+  .tw {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tbl {
+    min-width: 650px !important;
+  }
+
+  /* Compact calendar cells on mobile to fit screen */
+  .calcell {
+    min-height: 52px !important;
+    padding: 2px !important;
+  }
+  .ccnum {
+    font-size: 0.7rem !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .cev {
+    font-size: 0.52rem !important;
+    padding: 0.08rem 0.2rem !important;
+  }
 }
-@media(max-width:480px){.sg{grid-template-columns:1fr 1fr}.sc-val{font-size:1.6rem}}
+@media(max-width:480px){
+  .sg{grid-template-columns:1fr}
+  .sc-val{font-size:1.6rem}
+  .topbar{padding:0 1rem}
+}
 </style>
 </head>
 <body>
@@ -442,7 +504,7 @@ select.fi option{background:#FFF;color:var(--tx)}
             <div class="sc"><div class="sc-ico">⚡</div><div class="sc-val" id="dLds">–</div><div class="sc-lbl">En seguimiento</div><span class="sc-chg nt">Pipeline</span></div>
             <div class="sc"><div class="sc-ico">👥</div><div class="sc-val" id="dCli">–</div><div class="sc-lbl">Clientes</div><span class="sc-chg up">↑ Base</span></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 300px;gap:1.2rem;margin-bottom:1.2rem">
+          <div class="dash-grid-top">
             <div class="card">
               <div class="sh" style="margin-bottom:.9rem"><div class="sh-title">Actividad reciente</div></div>
               <div class="af" id="dashAct"><div class="loader"><div class="spin"></div>Cargando...</div></div>
@@ -452,7 +514,7 @@ select.fi option{background:#FFF;color:var(--tx)}
               <div class="card"><div class="sh-title" style="font-size:1rem;margin-bottom:.8rem">Propiedades por ciudad</div><div id="dashCities"></div></div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem">
+          <div class="dash-grid-bottom">
             <div class="card">
               <div class="sh"><div class="sh-title">Negocios recientes</div><button class="btns" onclick="go('negocios',document.querySelector('[data-pg=negocios]'))">Ver todos</button></div>
               <div id="dashNegocios"><div class="loader"><div class="spin"></div>Cargando...</div></div>
@@ -518,7 +580,7 @@ select.fi option{background:#FFF;color:var(--tx)}
         <!-- ████ AGENDA ████ -->
         <div class="page" id="pg-agenda">
           <div class="sh"><div><div class="sh-title">Agenda</div><div class="sh-sub">Visitas, reuniones y eventos</div></div><button class="btnp" onclick="openEventModal(null,'')">＋ Nuevo evento</button></div>
-          <div style="display:grid;grid-template-columns:1fr 260px;gap:1.2rem">
+          <div class="agenda-grid">
             <div class="calwrap">
               <div class="calhd">
                 <button class="calnav" onclick="calNav(-1)">‹</button>
