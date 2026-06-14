@@ -665,9 +665,19 @@ async function doLogin(){
   btn.disabled=true;btn.textContent='Ingresando...';
   ID('lErr').style.display='none';
   if(!sb){showApp({email:em,id:'demo'});return;}
-  var r=await sb.auth.signInWithPassword({email:em,password:pw});
-  btn.disabled=false;btn.textContent='Ingresar al panel';
-  if(r.error)showLErr(r.error.message.includes('Invalid')?'Correo o contraseña incorrectos':r.error.message);
+  try {
+    var r=await sb.auth.signInWithPassword({email:em,password:pw});
+    btn.disabled=false;btn.textContent='Ingresar al panel';
+    if(r.error) {
+      var msg=r.error.message||'Error de credenciales';
+      showLErr(msg.includes('Invalid')?'Correo o contraseña incorrectos':msg);
+    } else if(r.data && r.data.user) {
+      showApp(r.data.user);
+    }
+  } catch(err) {
+    btn.disabled=false;btn.textContent='Ingresar al panel';
+    showLErr('Error de red o almacenamiento: ' + err.message);
+  }
 }
 function showLErr(m){var e=ID('lErr');e.textContent=m;e.style.display='block';}
 ID('lPw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
